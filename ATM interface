@@ -1,0 +1,101 @@
+import java.util.Scanner;
+
+public class ATMInterface {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Initialize the ATM machine
+        ATM atm = new ATM();
+
+        // Welcome message
+        System.out.println("Welcome to the ATM!");
+
+        // Prompt for PIN
+        System.out.print("Enter your PIN: ");
+        int pin = scanner.nextInt();
+
+        // Authenticate the user
+        boolean isAuthenticated = atm.authenticate(pin);
+
+        if (isAuthenticated) {
+            // Show available options
+            System.out.println("Choose an option:");
+            System.out.println("1. Check Balance");
+            System.out.println("2. Withdraw Money");
+            System.out.println("3. Deposit Money");
+            System.out.println("4. Exit");
+
+            // Prompt for user's choice
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    // Check balance
+                    double balance = atm.checkBalance();
+                    System.out.println("Your balance is: " + balance);
+                    break;
+                case 2:
+                    // Withdraw money
+                    System.out.print("Enter the amount to withdraw: ");
+                    double amountToWithdraw = scanner.nextDouble();
+                    boolean isWithdrawn = atm.withdraw(amountToWithdraw);
+                    if (isWithdrawn) {
+                        System.out.println("Amount withdrawn successfully.");
+                    } else {
+                        System.out.println("Insufficient funds.");
+                    }
+                    break;
+                case 3:
+                    // Deposit money
+                    System.out.print("Enter the amount to deposit: ");
+                    double amountToDeposit = scanner.nextDouble();
+                    atm.deposit(amountToDeposit);
+                    System.out.println("Amount deposited successfully.");
+                    break;
+                case 4:
+                    // Exit
+                    System.out.println("Thank you for using the ATM. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
+            }
+        } else {
+            System.out.println("Invalid PIN. Exiting...");
+        }
+
+        scanner.close();
+    }
+}
+
+class ATM {
+    private int pin;
+    private double balance;
+
+    public ATM() {
+        // Initialize PIN and balance
+        this.pin = 1234;
+        this.balance = 1000.0;
+    }
+
+    public boolean authenticate(int enteredPin) {
+        return enteredPin == pin;
+    }
+
+    public double checkBalance() {
+        return balance;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+}
